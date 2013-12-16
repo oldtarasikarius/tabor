@@ -1,0 +1,5 @@
+name = Tabor Main Module
+description = Main custom module for tabor.ua
+version = 7.x-dev
+core = 7.x
+package = Tabor custom

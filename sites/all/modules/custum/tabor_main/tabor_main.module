@@ -1,0 +1,103 @@
+<?php
+/**
+ * @file
+ * Main custom module
+ */
+/**
+ * Implements hook_menu
+ */
+function tabor_main_menu() {
+  $items = array();
+  $items['modal/%ctools_js/comment-popup/%'] = array(
+    'title'          => 'Comment',
+    'page callback'  => 'tabor_main_ctools_modal_comment',
+    'page arguments' => array(1, 3),
+    'page access'    => TRUE,
+  );
+  
+  return $items;
+}
+
+///**
+// * Implements hook_block_info.
+// */
+//function tabor_main_block_info() {
+//  $blocks['add_comment'] = array(
+//    'info' => t('Add comment'),
+//  );
+//  
+//  return $blocks;
+//}
+//
+///**
+// * Implements hook_block_view.
+// */
+//function tabor_main_block_view($delta = '') {
+//  switch ($delta) {
+//    case 'add_comment':
+//      ctools_include('ajax');
+//      ctools_include('modal');
+//      ctools_modal_add_js();
+//      $art_id = arg(2);
+//      if (is_numeric($art_id)) {
+//        $block['content'] = l(
+//          t('Add comment'),
+//          "add/nojs/comment/{$art_id}",
+//          array(
+//            'html' => TRUE,
+//            'attributes' => array('class' => "ctools-use-modal")
+//          )
+//        );
+//      }
+//      break;
+//  }
+//  
+//  return $block;
+//}
+//
+///**
+// * Implements hook_form_alter.
+// */
+//function main_tabor_form_alter(&$form, &$form_state, $form_id) {
+//  switch ($form_id) {
+//    case 'comment_body':
+//      $art_id = arg(2);
+//      if (is_numeric(arg(2))) {
+//        $lang = field_language('node', $form['#node'], 'field_art');
+//        $form['field_news'][$lang][0]['nid']['#default_value'] = $news_id;
+//      }
+//  }
+//}
+
+/**
+ * Page callback for comment modal window creation.
+ */
+function tabor_main_ctools_modal_comment($js = NULL, $nid = NULL) {
+  $node = node_load($nid);
+  
+  if (!$js) {
+    return drupal_get_form('comment_node_' . $node->type '_form', (object)$edit);
+  }
+  $form_id  = 'comment_node_' . $node->type . '_form';
+  ctools_include('modal');
+  ctools_include('ajax');
+  
+  $comment = (object) array('nid' => $node->nid);
+  
+  $form_state = array(
+    'title' => 'Add comment',
+    'ajax' => TRUE,
+  );
+  
+  $form_state['build_info']['args'] = array($comment);
+  
+  $commands = ctools_modal_form_wrapper($form_id, $form_state);
+  
+  if(!empty($form_state['executed'])) {
+    $commands = array();
+    $commands[] = ctools_modal_command_dismiss(t('Your comment has been saved'));
+    $commands = ctools_ajax_command_reload()
+  }
+  
+  print ajax_render($commands);
+}

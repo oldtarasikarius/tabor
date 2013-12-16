@@ -1,0 +1,4 @@
+name        = comment form
+description = testing CTools modal API
+core        = 7.x
+version     = 7.x-dev

@@ -1,0 +1,5 @@
+name = Custom Parser
+description = Contains feeds plugins for XML import.
+core = 7.x
+version = 7.x-1.0
+files[] = CustomParserXML.inc

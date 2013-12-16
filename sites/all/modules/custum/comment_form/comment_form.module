@@ -1,0 +1,34 @@
+<?php
+/**
+ * @filesource
+ * Testing CTools modal API.
+ */
+/**
+ * Implements hook_menu.
+ */
+function comment_form_menu() {
+  $items['add/%ctools_js/comment'] = array(
+    'page callback'    => 'examples_ctools_modal_review',
+    'page arguments'   => array(1),
+    'access arguments' => array('create_review_content'),
+  );
+  
+  return $items;
+}
+
+/**
+ * Implements hook_block_info.
+ */
+function comment_form_block_info() {
+  $blocks['add_review'] = array(
+    'info' => t('Add review'),
+  );
+  
+  return $blocks;
+}
+
+/**
+ * Implements hook_block_view.
+ */
+
+    

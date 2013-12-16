@@ -1,0 +1,24 @@
+<?php
+
+/**
+ * @file
+ * Contains feeds plugins for XML import.
+ */
+
+
+/**
+ * Implements hook_feeds_plugins().
+ */
+function custom_parser_feeds_plugins() {
+  return array(
+    'CustomParserXML' => array(
+      'name' => t('Custom XML parser'),
+      'description' => t('Parses XML as we want.'),
+      'handler' => array(
+        'parent' => 'FeedsParser',
+        'class' => 'CustomParserXML',
+        'file' => 'CustomParserXML.inc',
+      ),
+    ),
+  );
+}

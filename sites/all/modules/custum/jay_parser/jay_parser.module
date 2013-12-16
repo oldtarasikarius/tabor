@@ -1,0 +1,30 @@
+<?php
+/**
+ * @file
+ * Jay`s example parser - simple parser plugin
+ */
+
+/**
+ * Implements hook_feeds_plugins.
+ */
+function jay_parser_feeds_plugins() {
+  $info['JayParser'] = array(
+    'name'        => 'Jay parser' ,
+    'description' => 'Parses some data',
+    'handler'     => array(
+      'parent' => 'FeedsParser',
+      'class'  => 'JayParser',
+      'file'   => 'JayParser.inc',
+      'path'   => drupal_get_path('module', 'jay_parser'),
+    ),
+  );
+  
+  return $info;
+}
+
+/**
+ * Implements function to clear Feeds cache.
+ */
+function jay_parser_enable() {
+  cache_clear_all('plugins:feeds:plugins', 'cache');
+}

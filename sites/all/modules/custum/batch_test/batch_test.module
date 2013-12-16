@@ -1,0 +1,76 @@
+<?php
+/**
+ *@filesource
+ *
+ */
+/**
+ * Implements hook_menu.
+ */
+function batch_test_menu() {
+  $items['batch-test'] = array(
+    'title'           => 'form for batch test',
+    'page callback'   => 'drupal_get_form',
+    'page arguments'  => array('batch_test_form'),
+    'access callback' => TRUE,
+  );
+  
+  return $items;
+}
+
+/**
+ * Implements batch_test_form.
+ */
+function batch_test_form($form, &$form_state) {
+ 
+  $form['submit'] = array(
+    '#type' => 'submit',
+    '#value' => t('Start'),
+    '#submit' => array('test_batch_submit'),
+  );
+  
+  return $form;
+}
+
+/**
+ * Implements test_batch_submit_function.
+ */
+function test_batch_submit($form, &$form_state) {
+  $n_count = db_query('SELECT COUNT(DISTINCT nid) FROM {node}')->fetchField();
+  drupal_set_message('<pre> Debug: ' . print_r($n_count, TRUE) . '</pre>');
+  
+  for ($nid = 1; $nid <= $n_count; $nid++) {
+    $operations[] = array('operation_function', array($nid));
+  }
+  $batch = array(
+    'operations' => $operations,
+    'finished'   => 'batch_test_finished_callback',
+  );
+  batch_set($batch);
+  batch_process();
+}
+/**
+* batch
+*/
+
+function operation_function($nid) {
+  $node = node_load($nid,$vid = NULL, $reset = FALSE);
+  $alt = $node->field_image_alt;
+  $title = $node->title;
+  if(empty($alt)) {
+    $alt = $title;
+  }
+  drupal_set_message('<pre> Debug: ' . print_r($alt, TRUE) . '</pre>');
+}
+///**
+//* finishig of batch
+//*/
+//function batch_test_finished_callback($success, $results, $operations) {
+//  if ($success) {
+//    $message = 'Process finished success';
+//  }
+//  else {
+//    $error_operation = reset($operations);
+//    $message = t('An error occurred while processing %error_operation with arguments: @arguments',     array('%error_operation' => $error_operation[0], '@arguments' => print_r($error_operation[1], TRUE)));
+//  }
+//  drupal_set_message($message);
+//}

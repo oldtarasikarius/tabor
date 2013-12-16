@@ -1,0 +1,35 @@
+<?php
+/**
+ * @file
+ * Module main file.
+ */
+/**
+ * Implements hook_menu
+ */
+function modal_tutorial_menu() {
+  $items = array();
+  $items['tutorial/page'] = array(
+    'title'           => 'Modal tutorial page',
+    'page callback'   => 'modal_tutorial_page_callback',
+    'access callback' => TRUE,
+    'file'            => 'pages.modal_tutorial.inc'
+  );
+  $items['ajax/%ctools_js/show/modal'] = array(
+    'title'           => 'Modal window',
+    'page callback'   => 'ajax_modal_tutorial_page_callback',
+    'page arguments'  => array(1),
+    'access callback' => TRUE,
+    'file'            => 'pages.modal_tutorial.inc'
+  );
+
+  return $items;
+}
+
+function modal_tutorial_init() {
+   $nig = 35;   
+   $node = node_load($nid, $vid = NULL, $reset = FALSE);
+  drupal_set_message('<pre> Debug: ' . print_r($node, TRUE) . '</pre>');  
+}
+
+
+
