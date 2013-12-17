@@ -7,28 +7,47 @@
  * Implements hook_menu.
  */
 function comment_form_menu() {
-  $items['add/%ctools_js/comment'] = array(
-    'page callback'    => 'examples_ctools_modal_review',
-    'page arguments'   => array(1),
-    'access arguments' => array('create_review_content'),
+  $items['comment/reply/%/%ctools_js'] = array(
+    'page callback'   => 'comment_form_modal',
+    'page arguments'  => array(2,3),
+    'access callback' => TRUE,
   );
   
   return $items;
 }
 
 /**
- * Implements hook_block_info.
- */
-function comment_form_block_info() {
-  $blocks['add_review'] = array(
-    'info' => t('Add review'),
-  );
-  
-  return $blocks;
-}
+ * Implements hook_node_view_alter.
+// */
+//function comment_form_node_view_alter(&$build) {
+//  ctools_include('modal');
+//  ctools_modal_add_js();
+//  //drupal_set_message('<pre> Debug: ' . print_r($build['links']['comment']['#links']['comment-add']['attributes']['class'], TRUE) . '</pre>');
+//  $nid = $build['body']['#object']->nid;
+//  $build['links']['comment']['#links']['comment-add']['href'] = "comment/reply/nojs/$nid";
+//  $build['links']['comment']['#links']['comment-add']['attributes']['class'] = 'ctools-use-modal';
+// drupal_set_message('<pre> Debug: ' . print_r($build['links']['comment']['#links']['comment-add'], TRUE) . '</pre>');
+//}
 
 /**
- * Implements hook_block_view.
+ * Build callback function.
  */
+//function comment_form_modal($js =NULL) {
+//  ctools_include('modal');
+//  ctools_include('ajax');
+//  ctools_modal_add_js();
+//  if ($js) {}
+//}
 
-    
+
+
+
+function comment_form_form_alter(&$form,&$form_state,$form_id) {
+  
+  switch ($form_id) {
+    case 'comment_node_article_form' :
+      drupal_set_message('<pre> Debug: ' . print_r($form, TRUE) . '</pre>');
+      
+      break;
+  }
+}

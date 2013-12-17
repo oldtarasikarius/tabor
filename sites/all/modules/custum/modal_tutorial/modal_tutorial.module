@@ -12,23 +12,60 @@ function modal_tutorial_menu() {
     'title'           => 'Modal tutorial page',
     'page callback'   => 'modal_tutorial_page_callback',
     'access callback' => TRUE,
-    'file'            => 'pages.modal_tutorial.inc'
+    //'file'            => 'pages.modal_tutorial.inc'
   );
   $items['ajax/%ctools_js/show/modal'] = array(
     'title'           => 'Modal window',
     'page callback'   => 'ajax_modal_tutorial_page_callback',
     'page arguments'  => array(1),
     'access callback' => TRUE,
-    'file'            => 'pages.modal_tutorial.inc'
+    //'file'            => 'pages.modal_tutorial.inc'
   );
 
   return $items;
 }
 
-function modal_tutorial_init() {
-   $nig = 35;   
-   $node = node_load($nid, $vid = NULL, $reset = FALSE);
-  drupal_set_message('<pre> Debug: ' . print_r($node, TRUE) . '</pre>');  
+/**
+ * Page callback
+ */
+function modal_tutorial_page_callback() {
+  ctools_include('ajax');
+  ctools_include('modal');
+  ctools_modal_add_js();
+  $build['paragraph'] = array(
+    '#prefix' => '<p>',
+    '#suffix' => '</p>',
+    '#markup' => t('Click on the button to show a cool modal'),
+  );
+  
+  $text = t('Show a popup');
+  $dest = 'ajax/nojs/show/modal';
+  $alt = t('Show a popup by a clicking');
+  $link = ctools_modal_text_button($text, $dest, $alt);
+  
+  $build['popup_link'] = array(
+    '#markup' => $link,
+  );
+ 
+  return render($build);
+}
+
+/**
+ * Modal window build.
+ */
+function ajax_modal_tutorial_page_callback($js = NULL) {
+  ctools_include('ajax');
+  ctools_include('modal');
+  if ($js) {
+    $title = t('Custom modal window');
+    $build = array(
+      '#prefix' => '<p>',
+      '#suffix' => '</p>',
+      '#markup' => t('Content of test custom modal window'),
+    );
+    $output = render($build);
+    ctools_modal_render($title, $output);
+  }
 }
 
 
